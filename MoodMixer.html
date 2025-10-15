@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mood Mixer — tiny interactive</title>
+  <style>
+    :root{--bg:#0f172a;--card:#0b1220;--accent:#60a5fa;color-scheme:dark}
+    *{box-sizing:border-box;font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial}
+    body{margin:0;min-height:100vh;background:linear-gradient(160deg,#071428, #0b1b2b);display:grid;place-items:center;padding:24px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,0.03),transparent);border-radius:14px;padding:18px;width:360px;color:#e6eef8;box-shadow:0 8px 30px rgba(2,6,23,.6)}
+    h1{font-size:18px;margin:0 0 10px}
+    .palette{display:flex;gap:8px;margin-bottom:12px}
+    .swatch{flex:1;height:44px;border-radius:8px;cursor:pointer;display:grid;place-items:center;font-weight:700}
+    .output{min-height:72px;padding:12px;border-radius:8px;background:rgba(255,255,255,0.02);line-height:1.4}
+    footer{font-size:12px;opacity:.7;margin-top:10px;text-align:right}
+    button.reset{margin-top:10px;width:100%;padding:8px;border-radius:8px;border:0;background:var(--accent);color:#04263b;font-weight:700;cursor:pointer}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Mood Mixer — click a color to create a short line</h1>
+    <div class="palette" id="palette">
+      <div class="swatch" data-tone="calm" style="background:#60a5fa">Sky</div>
+      <div class="swatch" data-tone="warm" style="background:#fb923c">Warm</div>
+      <div class="swatch" data-tone="deep" style="background:#7c3aed">Deep</div>
+      <div class="swatch" data-tone="fresh" style="background:#34d399">Fresh</div>
+    </div>
+    <div class="output" id="output">Your tiny poem will appear here — make a mood.</div>
+    <button class="reset" id="reset">Reset</button>
+    <footer>Small, meaningful — generates one-line micro-poetry.</footer>
+  </div>
+
+  <script>
+    const lines = {
+      calm: [
+        "a quiet breath hangs between the blue hours",
+        "clouds collect secrets and let them go softly"
+      ],
+      warm: [
+        "sunlight stitches gold into ordinary hours",
+        "hands find each other like two steady embers"
+      ],
+      deep: [
+        "the night keeps its slow, honest questions",
+        "stars trade the language of brave silence"
+      ],
+      fresh: [
+        "leaf and wind conspire toward small miracles",
+        "morning rinses the mind until it remembers to sing"
+      ]
+    }
+
+    const palette = document.getElementById('palette')
+    const output = document.getElementById('output')
+    const reset = document.getElementById('reset')
+
+    palette.addEventListener('click', e => {
+      const sw = e.target.closest('.swatch')
+      if(!sw) return
+      const tone = sw.dataset.tone
+      const choices = lines[tone]
+      const pick = choices[Math.floor(Math.random()*choices.length)]
+      output.textContent = pick
+      // small visual feedback
+      sw.animate([{transform:'scale(1)'},{transform:'scale(0.96)'},{transform:'scale(1)'}],{duration:220})
+    })
+
+    reset.addEventListener('click', ()=>{output.textContent = 'Your tiny poem will appear here — make a mood.'})
+  </script>
+</body>
+</html>
